@@ -13,8 +13,8 @@ usage
 ==========
 
 ```JavaScript
-var cpuid = require('cpuid');
-var cpuidInfo = cpuid();
+const cpuid = require('cpuid');
+const cpuidInfo = cpuid();
 ```
 
 cpuid is one function, which takes no arguments, and returns an object with properties representing the CPUID data.
