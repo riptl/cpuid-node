@@ -20,7 +20,6 @@
 	],
 	"targets": [{
 		"target_name": "cpuid",
-		'type': 'static_library',
 
 		'include_dirs': [
 			"<!(node -e \"require('nan')\")",

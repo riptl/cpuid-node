@@ -2,7 +2,7 @@
 #include <libcpuid.h>
 
 // Set feature Macro
-#define SF(jsName, cName) features->Set(Nan::New("jsName").ToLocalChecked(), Nan::New(cpuData.flags[CPU_FEATURE_ ## cName]))
+#define SF(jsName, cName) features->Set(Nan::New( #jsName ).ToLocalChecked(), Nan::New(cpuData.flags[CPU_FEATURE_ ## cName]))
 
 using namespace v8;
 
