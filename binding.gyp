@@ -46,7 +46,7 @@
 			
 				'conditions': [
 					['target_arch=="x64"', {
-						'sources': [ 'libcpuid/masm-x64.asm' ]
+						'sources': [ 'deps/libcpuid/libcpuid/masm-x64.asm' ]
 					}],
 				],
 			}],
