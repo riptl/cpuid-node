@@ -17,7 +17,7 @@ usage
 ==========
 
 ```JavaScript
-const cpuid = require('cpuid');
+const cpuid = require('cpuid-git');
 const cpuidInfo = cpuid();
 ```
 
