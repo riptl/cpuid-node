@@ -2,7 +2,7 @@
 #include <libcpuid.h>
 
 // Set feature Macro
-#define SF(jsName, cName) features->Set(Nan::New( #jsName ).ToLocalChecked(), Nan::New(cpuData.flags[CPU_FEATURE_ ## cName]))
+#define SF(jsName, cName) (Nan::Set(features, Nan::New( #jsName ).ToLocalChecked(), Nan::New(cpuData.flags[CPU_FEATURE_ ## cName])))
 
 using namespace v8;
 
@@ -44,7 +44,7 @@ static const char* mapVendor(cpu_vendor_t vendor) {
 }
 
 
-static void fillFeatures(Handle<Object> features, cpu_id_t& cpuData) {
+static void fillFeatures(Local<Object> features, cpu_id_t& cpuData) {
 	SF(fpu, FPU);
 	SF(virtualModeExtension, VME);
 	SF(debuggingExtension, DE);
@@ -158,36 +158,36 @@ static void fillFeatures(Handle<Object> features, cpu_id_t& cpuData) {
 	SF(adx, ADX);
 }
 
-static void fillCache(Handle<Object> cache, cpu_id_t& cpuData) {
+static void fillCache(Local<Object> cache, cpu_id_t& cpuData) {
 	Local<Object> l1 = Nan::New<Object>();
-	cache->Set(Nan::New("l1").ToLocalChecked(), l1);
+	Nan::Set(cache, Nan::New("l1").ToLocalChecked(), l1);
 
-	l1->Set(Nan::New("data").ToLocalChecked(), Nan::New(cpuData.l1_data_cache));
-	l1->Set(Nan::New("instruction").ToLocalChecked(), Nan::New(cpuData.l1_instruction_cache));
-	l1->Set(Nan::New("associativity").ToLocalChecked(), Nan::New(cpuData.l1_assoc));
-	l1->Set(Nan::New("cacheline").ToLocalChecked(), Nan::New(cpuData.l1_cacheline));
+  Nan::Set(l1, Nan::New("data").ToLocalChecked(), Nan::New(cpuData.l1_data_cache));
+	Nan::Set(l1, Nan::New("instruction").ToLocalChecked(), Nan::New(cpuData.l1_instruction_cache));
+	Nan::Set(l1, Nan::New("associativity").ToLocalChecked(), Nan::New(cpuData.l1_assoc));
+	Nan::Set(l1, Nan::New("cacheline").ToLocalChecked(), Nan::New(cpuData.l1_cacheline));
 
 	Local<Object> l2 = Nan::New<Object>();
-	cache->Set(Nan::New("l2").ToLocalChecked(), l2);
+	Nan::Set(cache, Nan::New("l2").ToLocalChecked(), l2);
 
-	l2->Set(Nan::New("size").ToLocalChecked(), Nan::New(cpuData.l2_cache));
-	l2->Set(Nan::New("associativity").ToLocalChecked(), Nan::New(cpuData.l2_assoc));
-	l2->Set(Nan::New("cacheline").ToLocalChecked(), Nan::New(cpuData.l2_cacheline));
+	Nan::Set(l2, Nan::New("size").ToLocalChecked(), Nan::New(cpuData.l2_cache));
+	Nan::Set(l2, Nan::New("associativity").ToLocalChecked(), Nan::New(cpuData.l2_assoc));
+	Nan::Set(l2, Nan::New("cacheline").ToLocalChecked(), Nan::New(cpuData.l2_cacheline));
 
 	Local<Object> l3 = Nan::New<Object>();
-	cache->Set(Nan::New("l3").ToLocalChecked(), l3);
+	Nan::Set(cache, Nan::New("l3").ToLocalChecked(), l3);
 
-	l3->Set(Nan::New("size").ToLocalChecked(), Nan::New(cpuData.l3_cache));
-	l3->Set(Nan::New("associativity").ToLocalChecked(), Nan::New(cpuData.l3_assoc));
-	l3->Set(Nan::New("cacheline").ToLocalChecked(), Nan::New(cpuData.l3_cacheline));
+	Nan::Set(l3, Nan::New("size").ToLocalChecked(), Nan::New(cpuData.l3_cache));
+	Nan::Set(l3, Nan::New("associativity").ToLocalChecked(), Nan::New(cpuData.l3_assoc));
+	Nan::Set(l3, Nan::New("cacheline").ToLocalChecked(), Nan::New(cpuData.l3_cacheline));
 }
 
-static void fillId(Handle<Object> id, cpu_id_t& cpuData) {
-	id->Set(Nan::New("family").ToLocalChecked(), Nan::New(cpuData.family));
-	id->Set(Nan::New("model").ToLocalChecked(), Nan::New(cpuData.model));
-	id->Set(Nan::New("stepping").ToLocalChecked(), Nan::New(cpuData.stepping));
-	id->Set(Nan::New("extFamily").ToLocalChecked(), Nan::New(cpuData.ext_family));
-	id->Set(Nan::New("extModel").ToLocalChecked(), Nan::New(cpuData.ext_model));
+static void fillId(Local<Object> id, cpu_id_t& cpuData) {
+	Nan::Set(id, Nan::New("family").ToLocalChecked(), Nan::New(cpuData.family));
+	Nan::Set(id, Nan::New("model").ToLocalChecked(), Nan::New(cpuData.model));
+	Nan::Set(id, Nan::New("stepping").ToLocalChecked(), Nan::New(cpuData.stepping));
+	Nan::Set(id, Nan::New("extFamily").ToLocalChecked(), Nan::New(cpuData.ext_family));
+	Nan::Set(id, Nan::New("extModel").ToLocalChecked(), Nan::New(cpuData.ext_model));
 }
 
 
@@ -208,26 +208,26 @@ NAN_METHOD(GetCPUID) {
 	}
 
 	Local<Object> data = Nan::New<Object>();
-	data->Set(Nan::New("vendorName").ToLocalChecked(), Nan::New(cpuData.vendor_str).ToLocalChecked());
-	data->Set(Nan::New("vendor").ToLocalChecked(), Nan::New(mapVendor(cpuData.vendor)).ToLocalChecked());
-	data->Set(Nan::New("vendorNumber").ToLocalChecked(), Nan::New(cpuData.vendor));
-	data->Set(Nan::New("brand").ToLocalChecked(), Nan::New(cpuData.brand_str).ToLocalChecked());
-	data->Set(Nan::New("codeName").ToLocalChecked(), Nan::New(cpuData.cpu_codename).ToLocalChecked());
-	data->Set(Nan::New("physicalCores").ToLocalChecked(), Nan::New(cpuData.num_cores));
-	data->Set(Nan::New("logicalCores").ToLocalChecked(), Nan::New(cpuData.num_logical_cpus));
-	data->Set(Nan::New("totalCores").ToLocalChecked(), Nan::New(cpuData.total_logical_cpus));
-	data->Set(Nan::New("clockSpeed").ToLocalChecked(), Nan::New(cpu_clock()));
+	Nan::Set(data, Nan::New("vendorName").ToLocalChecked(), Nan::New(cpuData.vendor_str).ToLocalChecked());
+	Nan::Set(data, Nan::New("vendor").ToLocalChecked(), Nan::New(mapVendor(cpuData.vendor)).ToLocalChecked());
+	Nan::Set(data, Nan::New("vendorNumber").ToLocalChecked(), Nan::New(cpuData.vendor));
+	Nan::Set(data, Nan::New("brand").ToLocalChecked(), Nan::New(cpuData.brand_str).ToLocalChecked());
+	Nan::Set(data, Nan::New("codeName").ToLocalChecked(), Nan::New(cpuData.cpu_codename).ToLocalChecked());
+	Nan::Set(data, Nan::New("physicalCores").ToLocalChecked(), Nan::New(cpuData.num_cores));
+	Nan::Set(data, Nan::New("logicalCores").ToLocalChecked(), Nan::New(cpuData.num_logical_cpus));
+	Nan::Set(data, Nan::New("totalCores").ToLocalChecked(), Nan::New(cpuData.total_logical_cpus));
+	Nan::Set(data, Nan::New("clockSpeed").ToLocalChecked(), Nan::New(cpu_clock()));
 
 	Local<Object> features = Nan::New<Object>();
-	data->Set(Nan::New("features").ToLocalChecked(), features);
+	Nan::Set(data, Nan::New("features").ToLocalChecked(), features);
 	fillFeatures(features, cpuData);
 
 	Local<Object> cache = Nan::New<Object>();
-	data->Set(Nan::New("cache").ToLocalChecked(), cache);
+	Nan::Set(data, Nan::New("cache").ToLocalChecked(), cache);
 	fillCache(cache, cpuData);
 
 	Local<Object> id = Nan::New<Object>();
-	data->Set(Nan::New("id").ToLocalChecked(), id);
+	Nan::Set(data, Nan::New("id").ToLocalChecked(), id);
 	fillId(id, cpuData);
 
 	info.GetReturnValue().Set(data);

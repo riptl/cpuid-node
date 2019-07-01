@@ -2,13 +2,14 @@
   "author": "Matt Holmes <mholmescode@gmail.com>",
   "name": "cpuid-git",
   "description": "Simple to use wrapper around LibCPUID. Gives extremely detailed information about the CPU(s) your code is running on.",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "repository": {
     "type": "git",
     "url": "git://github.com/terorie/cpuid-node.git"
   },
   "scripts": {
-    "install": "(node-gyp rebuild 2> builderror.log) || (exit 0)"
+    "install": "(node-gyp rebuild 2> builderror.log) || (exit 0)",
+    "test": "node test.js"
   },
   "engines": {
     "node": ">=0.8.0"
@@ -25,7 +26,7 @@
     "os"
   ],
   "dependencies": {
-    "nan": "^2.10.0"
+    "nan": "^2.14.0"
   },
   "contributors": [
     {
