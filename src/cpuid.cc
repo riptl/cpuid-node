@@ -44,7 +44,7 @@ static const char* mapVendor(cpu_vendor_t vendor) {
 }
 
 
-static void fillFeatures(Handle<Object> features, cpu_id_t& cpuData) {
+static void fillFeatures(Local<Object> features, cpu_id_t& cpuData) {
 	SF(fpu, FPU);
 	SF(virtualModeExtension, VME);
 	SF(debuggingExtension, DE);
@@ -158,7 +158,7 @@ static void fillFeatures(Handle<Object> features, cpu_id_t& cpuData) {
 	SF(adx, ADX);
 }
 
-static void fillCache(Handle<Object> cache, cpu_id_t& cpuData) {
+static void fillCache(Local<Object> cache, cpu_id_t& cpuData) {
 	Local<Object> l1 = Nan::New<Object>();
 	cache->Set(Nan::New("l1").ToLocalChecked(), l1);
 
@@ -182,7 +182,7 @@ static void fillCache(Handle<Object> cache, cpu_id_t& cpuData) {
 	l3->Set(Nan::New("cacheline").ToLocalChecked(), Nan::New(cpuData.l3_cacheline));
 }
 
-static void fillId(Handle<Object> id, cpu_id_t& cpuData) {
+static void fillId(Local<Object> id, cpu_id_t& cpuData) {
 	id->Set(Nan::New("family").ToLocalChecked(), Nan::New(cpuData.family));
 	id->Set(Nan::New("model").ToLocalChecked(), Nan::New(cpuData.model));
 	id->Set(Nan::New("stepping").ToLocalChecked(), Nan::New(cpuData.stepping));
